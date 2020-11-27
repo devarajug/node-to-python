@@ -14,10 +14,10 @@ def handler(event, context):
 			'body': json.dumps(response),
 			'headers': {"Access-Control-Allow-Origin": }#process.env.CORS_DOMAIN} need to set
     	}
-    except:
-        print(sys.exc_info()[1])
+    except Exception as err:
+        print(err)
         return {
 			'statusCode': 400,
-			'body': sys.exc_info(),
+			'body': err,
 			'headers': {"Access-Control-Allow-Origin": }#process.env.CORS_DOMAIN} need to set
 		}

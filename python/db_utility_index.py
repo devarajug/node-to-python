@@ -25,9 +25,9 @@ def Query(queryString, values=None):
         result = json.loads(result)
         conn.close()
         return result
-    except:
+    except Exception as err:
         conn.close()
-        return sys.exc_info()[1]
+        return err
 
 # print(Query("select exists (select table_catalog from information_schema.columns where table_schema = %s and table_name = %s)" ,['public', 'Authentication'])[0].get('exists'))
 def Select(tableName, properties=None): #based on properies input need to change code.

@@ -46,10 +46,10 @@ def atkassianEndpoints():
             defaultResults.append(temp)
 
         return defaultResults
-    except:
+    except Exception as err:
         return {
             'statusCode': 500,
-            'message': "Error retrieving atlassian endpoints." + str(sys.exc_info()[1])
+            'message': "Error retrieving atlassian endpoints." + str(err)
         }
 
 def getInternalID(data):
@@ -77,10 +77,10 @@ def getCustomENdpoints(data):
             'values' : appList
         }
         return Query(applications.get('text'), applications.get('values'))
-    except:
+    except Exception as err:
         return {
             'statusCode': 500,
-            'message': "ERROR retrieving application names. " + str(sys.exc_info()[1])
+            'message': "ERROR retrieving application names. " + str(err)
         }
 
 def checkDuplicateName(data):
@@ -114,10 +114,10 @@ def getAppNames(data):
             temp = AppNames(row.get('name'))
             results.append(temp)
         return results
-    except:
+    except Exception as err:
         return {
             'statusCode': 500,
-            'message': "Error retrieving appliacation names. " + str(sys.exc_info()[1])
+            'message': "Error retrieving appliacation names. " + str(err)
         }
 
 def subscribeuser(data, status_id):
@@ -161,10 +161,10 @@ def addApp(data):
             }
             insertStatus = Query(insertQuery.get('text'), insertQuery.get('values'))
             return subscribeUser(data, insertStatus)
-    except:
+    except Exception as err:
         return {
             'statusCode': 500,
-            'message': "Error adding application. " + str(sys.exc_info()[1])
+            'message': "Error adding application. " + str(err)
         }
 
 def reportIncident(data):
@@ -190,10 +190,10 @@ def reportIncident(data):
 
         return Query(insertUserInfo.get('text'), insertUserInfo.get('values'))
 
-    except:
+    except Exception as err:
         return {
             'statusCode': 500,
-            'message': "Error getting past  incidents. " + str(sys.exc_info()[1])
+            'message': "Error getting past  incidents. " + str(err)
         }
 
 def getIncidents(data):
@@ -204,10 +204,10 @@ def getIncidents(data):
         }
         incidents = Query(incidentInfo.get('text'), incidentInfo.get('values'))
         return incidents
-    except:
+    except Exception as err:
         return {
             'statusCode': 500,
-            'message': "Error getting past  incidents. " + str(sys.exc_info()[1]
+            'message': "Error getting past  incidents. " + str(err
         }
 
 def getDetailGroup(data):
@@ -219,10 +219,10 @@ def getDetailGroup(data):
 
         details = Query(detailsInfo.get('text'), detailsInfo.get('values'))
         return details
-    except:
+    except Exception as err:
         return {
             'statusCode': 500,
-            'message': "error getting past incidents. " + str(sys.exc_info()[1])
+            'message': "error getting past incidents. " + str(err)
         }
 
 def getStatus(data):
@@ -236,8 +236,8 @@ def getStatus(data):
             'message': "success",
             'body': response.body
         }
-    except:
+    except Exception as err:
         return {
             'statusCode': 404,
-            'message': "error retrieving status code. "+ str(sys.exc_info()[1])
+            'message': "error retrieving status code. "+ str(err)
         }

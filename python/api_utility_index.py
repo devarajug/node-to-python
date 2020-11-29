@@ -1,4 +1,4 @@
-import urllib3
+from packages import urllib3
 import json
 # process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 0; need to set after
 

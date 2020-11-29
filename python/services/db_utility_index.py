@@ -1,6 +1,6 @@
 import sys
 import json
-from pcakges import psycopg2
+from packages import psycopg2
 from packages.psycopg2.extras import RealDictCursor
 
 def db_configure():

@@ -1,5 +1,6 @@
 import sys
 import boto3
+import os
 from db_utility_index import Query, Select
 from api_utility_index import Get
 
@@ -24,13 +25,13 @@ getEnvironment = {
     "PROD":"1",
 }
 
-environment = getEnvironment.get(process.env.HOOVER_ENV, "3")
+environment = getEnvironment.get(os.environ.get('HOOVER_ENV') , "3")
 
-def atkassianEndpoints():
+def atlassianEndpoints():
     try:
         defaultResults = []
         getQuery = {
-            "text" : "SELECT (select bane from application_master"
+            "text" : "SELECT (select bane from application_master",
             "values" : [environment]
         }
         response = Query(queryString=getQuery.get("text"), values=getQuery.get('values'))
@@ -57,10 +58,10 @@ def getInternalID(data):
 		'text': "SELECT internal_id FROM user_master WHERE employee_id = %s",
 		'values': [data.get('userID')]
 	}
-    internalID = Query(queryString=internalIDQuery.get('text'), internalIDQuery.get('values'))
+    internalID = Query(queryString=internalIDQuery.get('text'), values=internalIDQuery.get('values'))
     return internalID
 
-def getCustomENdpoints(data):
+def getCustomEndpoints(data):
     try:
         internalID = getInternalID(data)
         appOwnerQuery = {
@@ -207,7 +208,7 @@ def getIncidents(data):
     except Exception as err:
         return {
             'statusCode': 500,
-            'message': "Error getting past  incidents. " + str(err
+            'message': "Error getting past  incidents. " + str(err)
         }
 
 def getDetailGroup(data):

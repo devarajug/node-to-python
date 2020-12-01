@@ -1,5 +1,5 @@
 import json
-from services.healthCheck import ( #change package
+from healthCheck import (
     atlassianEndpoints,
     getAppNames,
     reportIncident,
@@ -26,14 +26,3 @@ def healthHandler(event):
             raise Exception("Invalid Method")
     except Exception as e:
         return e
-
-# data = {"name":"sample", "action":"xyz"}
-# name = {
-#     "getAppNames": "getAppNames()",
-#     "addApp": "addApp(data)",
-#     "reportIncident": "reportIncident(data)",
-#     "customFeed": "getCustomEndpoints(data)",
-#     "getStatus" : "getStatus(data)"
-# }
-#
-# print(name.get(data.get('action'), 'Invalid Method'))

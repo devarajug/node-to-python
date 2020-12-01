@@ -1,4 +1,3 @@
-import sys
 import json
 from packages import psycopg2
 from packages.psycopg2.extras import RealDictCursor
@@ -17,7 +16,7 @@ def Query(queryString, values=None):
     conn = None
     try:
         conn = db_configure()
-        cur = conn.cursor(cursor_factory=RealDictCursor)
+        cur = conn.cursor(cursor_factory=RealDictCursor())
         # print(queryString, values)
         cur.execute(queryString, values)
 
@@ -44,16 +43,5 @@ def Select(tableName, properties=None): #based on properies input need to change
                 values.append(propertyValue)
                 queryString = queryString + " and " + propertyName + " = %s" #+ str(index+1)
 
-    # values = tuple(values)
-    # print(values)
     result = Query(queryString=queryString, values=values)
     return result
-    # return queryString
-
-properties = {
-    'table_schema' : 'public',
-    'table_name' : 'AuthenticationApp_user'
-}
-
-# for row in Select(tableName="information_schema.columns", properties=properties):
-#     print(row.get('table_catalog'))

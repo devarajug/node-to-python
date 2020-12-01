@@ -23,4 +23,4 @@ def handler(event, context):
 			'headers': {"Access-Control-Allow-Origin": os.environ.get('CORS_DOMAIN', '*')}
 		}
 
-print(handler({"path":"/hoover-health", "httpMethod":"GET"}, context=None))
+# print(handler({"path":"/hoover-health", "httpMethod":"GET"}, context=None))

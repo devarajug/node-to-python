@@ -16,16 +16,16 @@ def handler(event, context=None):
         requestHandler = routes.get(event.get('httpMethod'))
         response = requestHandler(event)
         return {
-			'statusCode': 200,
-			'body': json.dumps(ast.literal_eval(str(response))),
-			'headers': {"Access-Control-Allow-Origin": os.environ.get('CORS_DOMAIN', '*')}
+    		'statusCode': 200,
+    		'body': json.dumps(ast.literal_eval(str(response))),
+    		'headers': {"Access-Control-Allow-Origin": os.environ.get('CORS_DOMAIN', '*')}
     	}
     except Exception as err:
-        # print(err)
+        print(err)
         return {
 			'statusCode': 400,
 			'body': str(err),
 			'headers': {"Access-Control-Allow-Origin": os.environ.get('CORS_DOMAIN', '*')}
 		}
 
-print(handler({"path":"/hoover-healths", "httpMethod":"GET"}, context=None))
+# print(handler({ "path": "/hoover-health", "httpMethod": "POST", "body": {"action": "getStatus", "healthcheck_target": "https://www.google.com" } } , context=None))

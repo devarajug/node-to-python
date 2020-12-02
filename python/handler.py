@@ -13,16 +13,21 @@ def healthHandler(event):
         if event.get('httpMethod') == 'GET':
             return atlassianEndpoints()
         elif event.get('httpMethod') == 'POST':
-            data = json.loads(event.get('body'))
-            name = {
-                "getAppNames": getAppNames(),
-                "addApp": addApp(data),
-                "reportIncident": reportIncident(data),
-                "customFeed": getCustomEndpoints(data),
-                "getStatus" : getStatus(data)
-            }
-            return name.get(data.get('action'), 'Invalid Method')
+            data = event.get('body')
+            if data.get('action') == "getAppNames":
+                return getAppNames(data)
+            elif data.get('action') == "addApp":
+                return addApp(data)
+            elif data.get('action') == "reportIncident":
+                return reportIncident(data)
+            elif data.get('action') == "customFeed":
+                return getCustomEndpoints(data)
+            elif data.get("action") == "getStatus":
+                return getStatus(data)
+            else:
+                raise Exception("Invalid Method")
         else:
             raise Exception("Invalid Method")
+
     except Exception as e:
         return str(e)

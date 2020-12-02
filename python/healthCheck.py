@@ -135,9 +135,9 @@ def subscribeuser(data, status_id):
 
 def addApp(data):
     envType = None
-    if data.environment == "PROD":
+    if data.get('environment') == "PROD":
         envType = 1
-    elif data.environment == "UAT":
+    elif data.get('environment') == "UAT":
         envType = 2
     else:
         envType = 3
@@ -231,11 +231,11 @@ def getStatus(data):
         customOptions = {
             'timeout' : 3000
         }
-        response = Get(data.healthcheck_target, {}, customOptions)
+        response = Get(data.get('healthcheck_target'), {}, customOptions)
         return {
             'statusCode': response.status,
             'message': "success",
-            'body': response.body
+            'body': response.readlines()
         }
     except Exception as err:
         return {

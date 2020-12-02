@@ -1,4 +1,4 @@
-from packages import urllib3
+import urllib3
 import json
 import os
 os.environ['NODE_TLS_REJECT_UNAUTHORIZED'] = '0'

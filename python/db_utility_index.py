@@ -1,14 +1,15 @@
+import os
 import json
 import psycopg2
 from psycopg2.extras import RealDictCursor
 
 def db_configure():
     conn = psycopg2.connect(
-        host="localhost", #need to change to env
-        database="NFRSecurity", #need to change to env
-        user="pythonuser", #need to change to env
-        password="R@manujan22", #need to change to env
-        port=5432 #need to change to env
+        user=os.environ.get("PG_USERNAME"),
+        password=os.environ.get("PG_PASSWORD"),
+        database=os.environ.get("PG_DB_NAME"),
+        host=os.environ.get("PG_HOST"),
+        port=os.environ.get("PG_PORT")
     )
     return conn
 

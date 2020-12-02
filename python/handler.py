@@ -25,4 +25,4 @@ def healthHandler(event):
         else:
             raise Exception("Invalid Method")
     except Exception as e:
-        return e
+        return str(e)

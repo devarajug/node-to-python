@@ -40,7 +40,7 @@ def Get(url, customHeaders, customOptions):
         )
         return response
     except Exception as err:
-        return err
+        return str(err)
 
 # print(Get(url="https://www.google.com", customHeaders=commonHeaders, customOptions=commonOptions))
 def Request(url, method, body, customHeaders, customOptions):
@@ -89,4 +89,4 @@ def Request(url, method, body, customHeaders, customOptions):
                 'status': response.status
             }
     except Exception as err:
-        return err
+        return str(err)

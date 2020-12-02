@@ -26,7 +26,7 @@ def Query(queryString, values=None):
         return result
     except Exception as err:
         conn.close()
-        return err
+        return str(err)
 
 # print(Query("select exists (select table_catalog from information_schema.columns where table_schema = %s and table_name = %s)" ,['public', 'Authentication'])[0].get('exists'))
 def Select(tableName, properties=None): #based on properies input need to change code.

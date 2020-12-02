@@ -1,11 +1,15 @@
+import os
+import ast
 import json
 import route
-import os
+
 
 os.environ['NODE_TLS_REJECT_UNAUTHORIZED'] = '0'
 
 def handler(event, context):
     try:
+        temp = json.dumps(ast.literal_eval(data))
+        event_string = json.loads(temp)
         routes = route.exports(event.get('path'))
         requestHandler = routes.get(event.get('httpMethod'))
         response = requestHandler(event)

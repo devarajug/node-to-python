@@ -8,7 +8,7 @@ const commonHeaders = {
 	"Access-Control-Allow-Origin-Credentials": "true",
 	"Access-Control-Allow-Origin-Methods": "DELETE, POST GET OPTIONS",
 	"Access-Control-Allow-Origin-Headers":
-		"Access-Control-Allow-Origin.Content-Type, Access-Control-Allow-Headers, Authorization, X-requested-With, Accet, Access-Control-Allow-Origin-Credentials"
+	"Access-Control-Allow-Origin.Content-Type, Access-Control-Allow-Headers, Authorization, X-requested-With, Accet, Access-Control-Allow-Origin-Credentials"
 };
 
 const commonOptions = {

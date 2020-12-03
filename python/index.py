@@ -17,15 +17,15 @@ def handler(event, context=None):
         response = requestHandler(event)
         return {
     		'statusCode': 200,
-    		'body': json.dumps(ast.literal_eval(str(response))),
+    		'body': response.get('body').get('body'),
     		'headers': {"Access-Control-Allow-Origin": os.environ.get('CORS_DOMAIN', '*')}
     	}
     except Exception as err:
         print(err)
         return {
 			'statusCode': 400,
-			'body': str(err),
+			'body': "error from index file method handler" + str(err),
 			'headers': {"Access-Control-Allow-Origin": os.environ.get('CORS_DOMAIN', '*')}
 		}
 
-# print(handler({ "path": "/hoover-health", "httpMethod": "POST", "body": {"action": "getStatus", "healthcheck_target": "https://www.google.com" } } , context=None))
+print(handler({ "path": "/hoover-health", "httpMethod": "POST", "body": {"action": "getStatus", "healthcheck_target": "http://127.0.0.1:8000/nfr/security/cvc/sample/" } } , context=None))

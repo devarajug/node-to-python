@@ -1,6 +1,7 @@
-import urllib3
-import json
 import os
+import json
+import urllib3
+
 os.environ['NODE_TLS_REJECT_UNAUTHORIZED'] = '0'
 
 commonHeaders = {
@@ -38,55 +39,82 @@ def Get(url, customHeaders, customOptions):
             headers=options.get('headers'),
             timeout=options.get('timeout')
         )
-        return response
+        return response.data
     except Exception as err:
-        return str(err)
+        return "error in api utility index from Get method" + str(err)
 
-# print(Get(url="https://www.google.com", customHeaders=commonHeaders, customOptions=commonOptions))
-def Request(url, method, body, customHeaders, customOptions):
+# print(Get(url="http://127.0.0.1:8000/nfr/security/cvc/sample/", customHeaders=commonHeaders, customOptions=commonOptions))
+def Request(url, method, body=None, customHeaders=None, customOptions=None):
 
     try:
-        tempOptions = commonOptions
-        for key in tempOptions.keys():
-            if customOptions.get(key, 'sample_value') in customOptions:
-                del commonOptions[key]
-
-        tempHeaders = customHeaders
-        for key in tempHeaders.keys():
-            if tempHeaders.get(key, 'sample_value') in customHeaders:
-                del commonHeaders[key]
 
         options={
             **commonOptions,
-            **customOptions,
             'url': url,
-    		'method': "GET",
+    		'method': method,
     		'headers': {
     			**commonHeaders,
-    			**customHeaders
     		}
         }
+
+        if customHeaders:
+            if customHeaders.get('Authorization', None):
+                usename = customHeaders.get('Authorization').get('usename')
+                password = customHeaders.get('Authorization').get('password')
+                authentication_header = urllib3.make_headers(basic_auth=username+':'+password)
+                del customHeaders['Authorization']
+                customHeaders.update(authentication_header)
+
+                tempHeaders = customHeaders
+                for key in tempHeaders.keys():
+                    if tempHeaders.get(key, 'sample_value') in commonHeaders:
+                        del commonHeaders[key]
+                options.get('headers').update(customHeaders)
+
+        if customOptions:
+            tempOptions = commonOptions
+            for key in tempOptions.keys():
+                if customOptions.get(key, 'sample_value') in commonOptions:
+                    del commonOptions[key]
+
+            options.update(customOptions)
+
+
         if body:
             options['body'] = body
 
-        response = http.request(
-            url=options.get('url'),
-            method=options.get('method'),
-            headers=options.get('headers'),
-            timeout=options.get('timeout')
-        )
-
+        if options.get('timeout'):
+            timeout = options.get('timeout')
+            del options['timeout']
+            response = http.request(
+                url=options.get('url'),
+                method=options.get('method'),
+                headers=options.get('headers'),
+                timeout=timeout
+            )
+        else:
+            response = http.request(
+                url=options.get('url'),
+                method=options.get('method'),
+                headers=options.get('headers'),
+            )
+        body = response.data
         resBody=""
         if options.get('headers').get('Content-Type') == "application/xml":
             resBody = body
         else:
-            resBody = body if (body and isinstance(body, 'object') and body is not None) \
-                      else (json.loads(body) if (body and not isinstance(body, 'object') and body is not None) \
+            resBody = body if (body and isinstance(body, bytes) and body is not None) \
+                      else (json.loads(body) if (body and not isinstance(body, bytes) and body is not None) \
                       else "")
 
             return {
                 'body': resBody,
                 'status': response.status
             }
+            
     except Exception as err:
-        return str(err)
+        return {
+            'status':404,
+            'body' :"error in api utility index from Request method" + str(err),
+
+            }

@@ -15,17 +15,18 @@ def handler(event, context=None):
             raise Exception("Invalid Path")
         requestHandler = routes.get(event.get('httpMethod'))
         response = requestHandler(event)
-        return {
-    		'statusCode': 200,
-    		'body': response.get('body').get('body'),
+        result = {
+    		'statusCode': response.get('status'),
+    		'body': response.get('body') if isinstance(response, dict) and response.get('body', None) else str(response),
     		'headers': {"Access-Control-Allow-Origin": os.environ.get('CORS_DOMAIN', '*')}
     	}
     except Exception as err:
         print(err)
-        return {
+        result = {
 			'statusCode': 400,
 			'body': "error from index file method handler" + str(err),
 			'headers': {"Access-Control-Allow-Origin": os.environ.get('CORS_DOMAIN', '*')}
 		}
+    return result
 
-print(handler({ "path": "/hoover-health", "httpMethod": "POST", "body": {"action": "getStatus", "healthcheck_target": "http://127.0.0.1:8000/nfr/security/cvc/sample/" } } , context=None))
+print(handler({ "path": "/hoover-health", "httpMethod": "GET", "body": {"action": "getStatus", "healthcheck_target": "http://127.0.0.1:8000/nfr/security/cvc/sample/" } } , context=None))

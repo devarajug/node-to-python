@@ -1,5 +1,3 @@
-import sys
-import boto3
 import os
 from db_utility_index import Query, Select
 from api_utility_index import Get, Request
@@ -21,22 +19,24 @@ def atlassianEndpoints():
             "values" : [environment]
         }
         response = Query(queryString=getQuery.get("text"), values=getQuery.get('values'))
-
         for row in response:
             temp = {
-                "name":row.get('name'),
-                "application_id":row.get('application_id'),
-                "default_atlassian":row.get('default_atlassian'),
-                "healthcheck_target":row.get('healthcheck_target')
+                "name":row[0],
+                "application_id":row[1],
+                "default_atlassian":row[2],
+                "environment_type_id":row[3],
+                "healthcheck_target":row[4]
             }
             defaultResults.append(temp)
-
-        return defaultResults
-    except Exception as err:
-        return {
-            'statusCode': 500,
-            'message': "Error retrieving atlassian endpoints." + str(err)
+        result = {
+            'status':200,
+            'body':defaultResults
         }
+    except IndexError as ie:
+        result = {"status":404, "body":"Atlasian Endpoints Query Result" + str(ie)}
+    except Exception as err:
+        result = {"status":404, "body":"Error retrieving atlassian endpoints." + str(err)}
+    return result
 
 def getDetailGroup(data):
     try:
@@ -45,19 +45,16 @@ def getDetailGroup(data):
             "values" : [data.get('appID')]
         }
         details = Query(queryString=incidentInfo.get("text"), values=incidentInfo.get('values'))
-        return details
+        result = details
     except Exception as err:
-        return {
-            'statusCode': 500,
-            'message': "from getDetailsGroup Method Error getting past incidents. "+str(err)
-        }
+        result = "from getDetailsGroup Method Error getting past incidents. "+str(err)
+    return result
 
 def getStatus(data):
     try:
         customOptions = {
             'timeout' : 3000
         }
-        response = None
         if 'jenkins' in data.get('healthcheck_target'):
             response = Request(
                 url=data.get("healthcheck_target"),
@@ -73,8 +70,8 @@ def getStatus(data):
                 }
 
             )
-            return {
-                'responseStatusCode': response.get('status'),
+            result = {
+                'statusCode': response.get('status'),
                 'message': response.get('body'),
                 'body': response
             }
@@ -86,14 +83,10 @@ def getStatus(data):
                 customOptions=customOptions
             )
 
-            return {
-                'responseStatusCode': response.get('status'),
-                'message': response.get('body'),
-                'body': response
-            }
-
+            result = response
     except Exception as err:
-        return {
+        result = {
             'statusCode': 404,
             'message': "from getStatus method in healthcheck file error retrieving status code. "+ str(err)
         }
+    return result

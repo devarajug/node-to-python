@@ -1,36 +1,32 @@
 import os
 import json
 import psycopg2
-from psycopg2.extras import RealDictCursor
 
-def db_configure():
-    conn = psycopg2.connect(
-        user=os.environ.get("PG_USERNAME"),
-        password=os.environ.get("PG_PASSWORD"),
-        database=os.environ.get("PG_DB_NAME"),
-        host=os.environ.get("PG_HOST"),
-        port=os.environ.get("PG_PORT")
-    )
-    return conn
+PG_Config = {
+    'user':'pythonuser', #os.environ.get("PG_USERNAME"),
+    'password':'R@manujan22', #os.environ.get("PG_PASSWORD"),
+    'database':'NFRSecurity', #os.environ.get("PG_DB_NAME"),
+    'host':'127.0.0.1', #os.environ.get("PG_HOST"),
+    'port':5432, #os.environ.get("PG_PORT")
+    'sslmode':'require'
+}
 
 def Query(queryString, values=None):
     conn = None
     try:
-        conn = db_configure()
-        cur = conn.cursor(cursor_factory=RealDictCursor())
-        # print(queryString, values)
-        cur.execute(queryString, values)
+        with psycopg2.connect(**PG_Config) as conn:
+            cur = conn.cursor()
+            cur.execute(queryString, values)
+            result = cur.fetchall()
 
-        result = json.dumps(cur.fetchall(), indent=2)
-        result = json.loads(result)
-        conn.close()
-        return result
-    except Exception as err:
-        conn.close()
-        return str(err)
+    except (Exception, psycopg2.DatabaseError) as err:
+        result = str(err)
 
-# print(Query("select exists (select table_catalog from information_schema.columns where table_schema = %s and table_name = %s)" ,['public', 'Authentication'])[0].get('exists'))
-def Select(tableName, properties=None): #based on properies input need to change code.
+    return result
+
+# print(Query("select exists (select table_catalog from information_schema.columns where table_schema = %s and table_name = %s)" ,['public', 'Authentication']))
+
+def Select(tableName, properties=None):
 
     values = []
     queryString = "select table_catalog from " + tableName

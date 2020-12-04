@@ -7,15 +7,20 @@ from healthCheck import (
 def healthHandler(event):
     try:
         if event.get('httpMethod') == 'GET':
-            return atlassianEndpoints()
+            result = atlassianEndpoints()
         elif event.get('httpMethod') == 'POST':
             data = event.get('body')
             if data.get("action") == "getStatus":
-                return getStatus(data)
+                result = getStatus(data)
             else:
                 raise Exception("Invalid Method")
         else:
             raise Exception("Invalid Method")
 
     except Exception as e:
-        return "error from healthHandler method from handler file" + str(e)
+        result = {
+            'statusCode' : 400,
+            'message' : "error from healthHandler method from handler file" + str(e)
+        }
+        
+    return result

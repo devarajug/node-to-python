@@ -39,7 +39,7 @@ def Get(url, customHeaders, customOptions):
             headers=options.get('headers'),
             timeout=options.get('timeout')
         )
-        return response.data
+        return response
     except Exception as err:
         return "error in api utility index from Get method" + str(err)
 
@@ -47,7 +47,6 @@ def Get(url, customHeaders, customOptions):
 def Request(url, method, body=None, customHeaders=None, customOptions=None):
 
     try:
-
         options={
             **commonOptions,
             'url': url,
@@ -107,14 +106,15 @@ def Request(url, method, body=None, customHeaders=None, customOptions=None):
                       else (json.loads(body) if (body and not isinstance(body, bytes) and body is not None) \
                       else "")
 
-            return {
-                'body': resBody,
+            result = {
+                'body': resBody if resBody else "",
                 'status': response.status
             }
-            
+
     except Exception as err:
-        return {
+        result = {
             'status':404,
             'body' :"error in api utility index from Request method" + str(err),
+        }
 
-            }
+    return result

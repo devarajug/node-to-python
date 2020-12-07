@@ -29,4 +29,4 @@ def handler(event, context=None):
 		}
     return result
 
-print(handler({ "path": "/hoover-health", "httpMethod": "GET", "body": {"action": "getStatus", "healthcheck_target": "http://127.0.0.1:8000/nfr/security/cvc/sample/" } } , context=None))
+print(handler({ "path": "/hoover-health", "httpMethod": "POST", "body": {"action": "getStatus", "healthcheck_target": "http://127.0.0.1:8000/nfr/security/cvc/sample/" } } , context=None))

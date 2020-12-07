@@ -1,6 +1,6 @@
 import os
-from db_utility_index import Query, Select
-from api_utility_index import Get, Request
+from shared_modules.db_utility_index import Query, Select
+from shared_modules.api_utility_index import Get, Request
 
 
 env_name = os.environ.get("HOOVER_ENV")

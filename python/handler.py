@@ -22,5 +22,5 @@ def healthHandler(event):
             'statusCode' : 400,
             'message' : "error from healthHandler method from handler file" + str(e)
         }
-        
+
     return result
